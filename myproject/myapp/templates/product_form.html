@@ -1,0 +1,13 @@
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'style3.css' %}">
+<div class = 'container'>
+<h1>{% if form.instance.pk %}Update{% else %}Create{% endif %} Product</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">{% if form.instance.pk %}Update{% else %}Create{% endif %}</button>
+</form>
+<a href="{% url 'product_list' %}">Back to Product List</a>
+</div>
+
