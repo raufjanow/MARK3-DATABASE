@@ -1,13 +1,40 @@
-
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'style3.css' %}">
-<div class = 'container'>
-<h1>{% if form.instance.pk %}Update{% else %}Create{% endif %} Product</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">{% if form.instance.pk %}Update{% else %}Create{% endif %}</button>
-</form>
-<a href="{% url 'product_list' %}">Back to Product List</a>
+<link rel="stylesheet" type="text/css" href="{% static 'fform.css' %}">
+
+<div class="container">
+    <h1>{% if form.instance.pk %}Update{% else %}Create{% endif %} Product</h1>
+    <form id="productForm" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button id="submitButton" type="submit">{% if form.instance.pk %}Update{% else %}Create{% endif %}</button>
+    </form>
+    <a href="{% url 'product_list' %}">Back to Product List</a>
 </div>
 
+<script>
+    document.getElementById('productForm').addEventListener('input', function() {
+        let submitButton = document.getElementById('submitButton');
+        if (this.checkValidity()) {
+            submitButton.textContent = '{% if form.instance.pk %}Update{% else %}Ready to Create{% endif %}';
+        } else {
+            submitButton.textContent = '{% if form.instance.pk %}Update{% else %}Create{% endif %}';
+        }
+    });
+
+
+    document.getElementById('productForm').addEventListener('submit', function(event) {
+        let confirmed = confirm("Are you sure you want to submit this product?");
+        if (!confirmed) {
+            event.preventDefault(); 
+        }
+    });
+
+
+    document.getElementById('productForm').addEventListener('submit', function(event) {
+        let formValid = this.checkValidity(); 
+        if (!formValid) {
+            event.preventDefault();  
+            alert("Please fill out all required fields.");
+        }
+    });
+</script>

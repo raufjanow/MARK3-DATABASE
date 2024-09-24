@@ -3,22 +3,49 @@
 <head>
     <title>Product List</title>
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'list.css' %}">
+    <script>
+        function confirmDelete(event) {
+            if (!confirm('Are you sure you want to delete this product?')) {
+                event.preventDefault();  
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="container">
         <h1>Product List</h1>
         <a href="{% url 'create_product' %}" class="add-new">Add New Item</a>
-        <ul>
+        <input type="text" id="search-box" placeholder="Search products..." onkeyup="filterProducts()">
+        <ul id="product-list">
             {% for product in products %}
             <li>
                 <a href="{% url 'product_detail' product.pk %}">{{ product.name }}</a> - 
                 <a href="{% url 'update_product' product.pk %}">Edit</a> - 
-                <a href="{% url 'delete_product' product.pk %}">Delete</a>
+                <a href="{% url 'delete_product' product.pk %}" onclick="confirmDelete(event)">Delete</a>
             </li>
             {% endfor %}
         </ul>
     </div>
+
+    <script>
+        function filterProducts() {
+            let input = document.getElementById('search-box');
+            let filter = input.value.toLowerCase();
+            let ul = document.getElementById('product-list');
+            let li = ul.getElementsByTagName('li');
+
+            for (let i = 0; i < li.length; i++) {
+                let a = li[i].getElementsByTagName('a')[0];
+                if (a.innerHTML.toLowerCase().indexOf(filter) > -1) {
+                    li[i].style.display = '';
+                } else {
+                    li[i].style.display = 'none';
+                }
+            }
+        }
+    </script>
 </body>
 </html>
+
 
